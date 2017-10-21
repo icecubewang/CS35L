@@ -1,0 +1,167 @@
+lab2.log
+
+Feilan Wang
+UID:104796844
+
+
+1. Login to SEASNET account
+2. Check if I'm in standard C by typing 
+	$locale
+3. I'm not in standard C, so type
+	$export LC_ALL='C'
+4. Now check again, and I'm in standard C.
+
+5. Enter the directory for this lab (CS35Lass2).
+6. Sort the file words by typing
+	$sort -o words /usr/share/dict/words
+   This creates a sorted version of /usr/share/dict/words
+   and store it as a new file named words in the current directory. 
+
+7. We want to take a text file
+   containing the HTML in this assignment's web page.
+   We can do this by typing
+	$curl -o assign2.html
+	http://web.cs.ucla.edu/classes/fall17/cs35L/assign/assign2.html
+8. Now, when we type in 
+	$ls, 
+	there's an html file in the current directory. 
+
+9. Try the html file with the command:
+
+	a:
+	$tr -c 'A-Za-z' '[\n*]' < assign2.html
+
+	This outputs the words that has A-Za-z. 
+	Anything that doesn't belongs to A-Za-z becomes a newline.
+
+	b:
+	$tr -cs 'A-Za-z' '[\n*]' < assign2.html
+
+	This outputs is the same as in part a,
+	except all the newlines (not include the first newline) are gone. 
+	This is because the -s flag
+	squeezes all multiple occurances of [\n*] into a single instance,
+	which is the first newline in the entire .html file. 
+
+	c:
+	$tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort
+
+	This outputs contents similar to that in part b,
+	except this time the contents are sorted in alphabetically order
+	and we can easily determine the number of occurances for each word.
+
+	d:
+	$tr -cs 'A-Za-z' '[\n*]' <assign2.html | sort -u
+
+	This outputs contents similar to that in part c,
+	except this time, each word occurs only once.
+	This is because -u flag means unique,
+	it outputs only the first of an equal run. 
+
+	e:
+	$tr -cs 'A-Za-z' '[\n*]' < assign2.html | sort -u | comm - words
+
+	This outputs three columns of words. 
+	1st column: words that only exist in the output in part d.
+	2nd column: words that only exist in the file words.
+	3rd column: words that exist in both files. 
+
+	f:
+	$tr -cs 'A-Za-z' '[\n*]' <assign2.html | sort -u | comm -23 - words
+
+	This outputs only the first column of the contents in part e,
+	which is the list of words that only exist in part d.
+	-23 means supress the printing of column 2 and column 3.
+
+10. We want to take a text file containing the HTML
+    of the "English to Hawaiian" page.
+    We can do this by typing
+	$wget  http://mauimapp.com/moolelo/hwnwdseng.htm
+
+11. Use emacs to edit a file called buildwords.
+    This consists of the commands to be performed. 
+
+	#!/bin/sh
+
+	#delete things from the first line <!DOCTYPE
+	to the first english word Adopt</td>
+	sed '/<!DOCTYPE/,/Adopt<\/td>/d' |
+
+	#delete things after and include </table>
+	sed '/<\/table>/,/<\/html>/d' |
+
+	#delete all english words
+	sed '/<\/tr>/,/<\/td>/d' |
+
+	#delete newlines and returns
+	tr -d '\r\n' |
+
+	#translate upper case letters to lower case letters
+	tr '[:upper:]' '[:lower:]' |
+
+	#replace </td> with newline
+	sed 's/<\/td>/\n/g' |
+
+	#replace ` with '
+	sed 's/\`/\'/g' |
+
+	#replace , with newline
+	sed 's/\,/\n/g' |
+
+	#delete all the < > and things inside 
+	sed 's/<[^>]*>//g' | 
+
+	#seperate words in a sentence 
+	sed 's/ /\n/g' |
+
+	#delete spaces
+	tr -d '[:blank:]' |
+
+	#delete illformed haiwaiian words
+	sed '/-/d' |
+
+	#delete entries that contain non-Hawaiian letters
+	tr -cs 'pk\mnwlhaeiou' '[\n*]' |
+
+	#sort the words and delete duplicates
+	sort -u |
+
+	#remove the empty lines
+	sed '/^$/d'
+
+12. Make buildwords file executable. 
+	$chmod +x buildwords
+
+13. Create hwords by typing 
+	$cat hwnwdseng.htm | ./buildwords > hwords
+
+14. Now we want to create a file that
+    includes all the misspelled english words.
+    We can do this by typing 
+	$cat assign2.html |
+	 tr -cs 'A-Za-z' '[\n*]' |
+	 tr '[:upper:]' '[:lower:]' |
+	 sort -u | 
+	 comm -23 - words > misspelledEnglish 
+
+15. To count the number of misspelled english words, we can type
+	$wc -w misspelledEnglish 
+	==> 38 misspelledEnglish 
+
+16. To create a Hawaiian spelling check, we can do the same.
+	$cat assign2.html | 
+	tr -cs "pk\'mnwlhaeiou" '[\n*]' |
+	tr '[:upper:]' '[:lower:]' |
+	sort -u | comm -23 - hwords > misspelledHaiwaiian
+
+17. To count the number of misspelled haiwaiian words, we can type 
+	$wc -w misspelledHaiwaiian
+	==> 214 misspelledHaiwaiian
+
+18. To see the difference between misspelledEnglish words
+    and misspelledHawaiian words,
+    we can type
+	$comm -3 misspelledEnglish misspelledHaiwaiian 
+
+	misspelled as English but not Haiwaiian: html
+	misspelled as Haiwaiian but not English: awk

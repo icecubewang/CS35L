@@ -1,0 +1,60 @@
+#!/bin/bash
+
+dir=$1
+
+RESULT=`ls $dir | sort`
+HIDDENFILE=`ls -a $dir | grep '^\.' | sort`
+let count=0
+declare -a ARRAY
+
+restore="$IFS"
+IFS=$'\n'
+
+for HFILE in $HIDDENFILE
+do
+	if [ ! -f "$dir/$HFILE" ]
+	then
+		:
+	elif [ -L "$dir/$HFILE" ]
+	then
+		:
+	elif [ ! -r "$dir/$HFILE" ]
+	then
+		echo "$HIDDENFILE is not readable"
+	else
+		ARRAY[$count]="$dir/$HFILE"
+		let count=count+1
+	fi
+done
+
+for FILE in $RESULT
+do
+	if [ -L "$dir/$FILE" ]
+	then
+		:
+	elif [ ! -f "$dir/$FILE" ]
+	then
+		:
+	elif [ ! -r "$dir/$FILE" ]
+	then
+		echo "$FILE is not readable"
+	else
+		ARRAY[$count]="$dir/$FILE"
+		let count=count+1
+	fi
+done
+
+for (( i=0; i<$count; i++ ))
+do
+	for (( j=i+1; j<$count; j++ ))
+	do
+		cmp -s "${ARRAY[$i]}" "${ARRAY[$j]}"
+		if [ $? -eq 0 ]
+		then
+			ln -f "${ARRAY[$i]}" "${ARRAY[$j]}"
+			ARRAY[$j]=ARRAY[$i]
+		fi
+	done
+done
+
+IFS=$restore
