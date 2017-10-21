@@ -1,0 +1,373 @@
+CS 35L
+Assignment 1
+
+ans1.txt
+
+Q1:
+$man man
+This is to look up for manual for man. 
+From the manual, we know that -K searches for specific strings in all man page.
+So we can do the following,
+$man -K "specific word"
+
+Q2:
+From man -k location, the manual indicates we should use which. 
+$which cp
+/bin/cp
+$which wc
+/usr/bin/wc
+
+Q3:
+man w 
+w: show who is logged on and what they are doing
+man X
+X: a portable, network-transparent window system
+
+Q4:
+$readlink /usr/bin/emacs
+/etc/alternatives/emacs
+
+It will translate the relative path to absolute path or translate the symlink(softlink) name to real path.
+
+Q5:
+use
+$man chmod 
+to find out. 
+g+s means set the owner group on execution.
+o-x means the execution bit should be cleared for others.
+
+Q6:
+$man find
+This is to look up for manual for find.
+From the manual, we know that -mtime [n] searches for files that was last modified n days ago. 
+$find -mtime 21
+
+Q7:
+use
+$man find 
+$find / -type d -mtime -21
+
+Q8:
+first, find out where is find 
+$which find 
+/usr/bin/find
+$find /usr/bin -type l
+
+/usr/bin/dvired
+/usr/bin/etags
+/usr/bin/psfaddtable
+/usr/bin/pdfjadetex
+/usr/bin/open
+/usr/bin/texhash
+/usr/bin/captoinfo
+/usr/bin/unxz
+/usr/bin/pmiostat
+/usr/bin/bzcat
+/usr/bin/apropos
+/usr/bin/xzegrep
+/usr/bin/lpq
+/usr/bin/etex
+/usr/bin/xjc
+/usr/bin/javaws
+/usr/bin/gsoelim
+/usr/bin/texlinks
+/usr/bin/hwloc-ls
+/usr/bin/rmic
+/usr/bin/lpr
+/usr/bin/pdfxmltex
+/usr/bin/slogin
+/usr/bin/lpstat
+/usr/bin/kdesu
+/usr/bin/kpsewhere
+/usr/bin/systemd-loginctl
+/usr/bin/allneeded
+/usr/bin/gjs
+/usr/bin/keytool
+/usr/bin/thumbpdf
+/usr/bin/jcmd
+/usr/bin/extractbb
+/usr/bin/wish
+/usr/bin/texconfig
+/usr/bin/htmex
+/usr/bin/mailq.postfix
+/usr/bin/pdflatex
+/usr/bin/appletviewer
+/usr/bin/iptables-xml
+/usr/bin/nfs4_editfacl
+/usr/bin/jjs
+/usr/bin/lastb
+/usr/bin/gtroff
+/usr/bin/serialver
+/usr/bin/jar
+/usr/bin/xzcat
+/usr/bin/libpng-config
+/usr/bin/db2pdf
+/usr/bin/gimp-console
+/usr/bin/dvilualatex
+/usr/bin/allcm
+/usr/bin/vimdiff
+/usr/bin/texluac
+/usr/bin/idlj
+/usr/bin/xzcmp
+/usr/bin/httex
+/usr/bin/gmake
+/usr/bin/awk
+/usr/bin/mktexfmt
+/usr/bin/javac
+/usr/bin/sudoedit
+/usr/bin/mailq.sendmail
+/usr/bin/nc
+/usr/bin/dvipdfm
+/usr/bin/atq
+/usr/bin/fmtutil-sys
+/usr/bin/gpgv
+/usr/bin/db2dvi
+/usr/bin/combinediff
+/usr/bin/unix2mac
+/usr/bin/ld
+/usr/bin/pdfetex
+/usr/bin/bashbug
+/usr/bin/orbd
+/usr/bin/hoststat
+/usr/bin/ksh
+/usr/bin/db2ps
+/usr/bin/jconsole
+/usr/bin/sg
+/usr/bin/initex
+/usr/bin/policytool
+/usr/bin/bzless
+/usr/bin/x86_64
+/usr/bin/rksh
+/usr/bin/lprm
+/usr/bin/mailq
+/usr/bin/pmevent
+/usr/bin/simpdftex
+/usr/bin/wsimport
+/usr/bin/extcheck
+/usr/bin/jhat
+/usr/bin/paplay
+/usr/bin/java
+/usr/bin/htxelatex
+/usr/bin/rview
+/usr/bin/rmid
+/usr/bin/rmail
+/usr/bin/mac2unix
+/usr/bin/python2-config
+/usr/bin/cancel
+/usr/bin/jdb
+/usr/bin/bzcmp
+/usr/bin/pax
+/usr/bin/rvim
+/usr/bin/pack200
+/usr/bin/jade
+/usr/bin/gpic
+/usr/bin/traceroute6
+/usr/bin/fmtutil
+/usr/bin/infotocap
+/usr/bin/javah
+/usr/bin/jrunscript
+/usr/bin/desktop-file-edit
+/usr/bin/passwd
+/usr/bin/nmtui-connect
+/usr/bin/readcd
+/usr/bin/reset
+/usr/bin/javadoc
+/usr/bin/psfstriptable
+/usr/bin/inimf
+/usr/bin/ht
+/usr/bin/jadetex
+/usr/bin/python
+/usr/bin/kpsexpand
+/usr/bin/emacs
+/usr/bin/setup
+/usr/bin/updmap
+/usr/bin/newaliases.postfix
+/usr/bin/schemagen
+/usr/bin/ex
+/usr/bin/texconfig-dialog
+/usr/bin/python-config
+/usr/bin/python2
+/usr/bin/bunzip2
+/usr/bin/allec
+/usr/bin/kpsepath
+/usr/bin/nail
+/usr/bin/mkisofs
+/usr/bin/htcontext
+/usr/bin/unpack200
+/usr/bin/dviluatex
+/usr/bin/servertool
+/usr/bin/newaliases.sendmail
+/usr/bin/jstat
+/usr/bin/systemd-coredumpctl
+/usr/bin/pamon
+/usr/bin/rvi
+/usr/bin/jsadebugd
+/usr/bin/rhn_register
+/usr/bin/htxetex
+/usr/bin/view
+/usr/bin/psfgettable
+/usr/bin/dvdrecord
+/usr/bin/xzfgrep
+/usr/bin/nisdomainname
+/usr/bin/mail
+/usr/bin/grepdiff
+/usr/bin/sh
+/usr/bin/newaliases
+/usr/bin/gpg
+/usr/bin/nsgmls
+/usr/bin/ypdomainname
+/usr/bin/spent
+/usr/bin/texlua
+/usr/bin/makemap
+/usr/bin/kpsetool
+/usr/bin/setup-nsssysinit
+/usr/bin/f95
+/usr/bin/dvi2fax
+/usr/bin/phar
+/usr/bin/pmcollectl
+/usr/bin/flipdiff
+/usr/bin/atrm
+/usr/bin/flex++
+/usr/bin/mk4ht
+/usr/bin/lex
+/usr/bin/jstack
+/usr/bin/geqn
+/usr/bin/xmltex
+/usr/bin/rnano
+/usr/bin/latex
+/usr/bin/linux32
+/usr/bin/parec
+/usr/bin/i386
+/usr/bin/mkhybrid
+/usr/bin/sgmlnorm
+/usr/bin/rpmquery
+/usr/bin/htlatex
+/usr/bin/mptopdf
+/usr/bin/chsh
+/usr/bin/rpmverify
+/usr/bin/X
+/usr/bin/sgml2xml
+/usr/bin/ghostscript
+/usr/bin/byacc
+/usr/bin/ping6
+/usr/bin/nmtui-hostname
+/usr/bin/links
+/usr/bin/gtbl
+/usr/bin/lualatex
+/usr/bin/latrace-ctl
+/usr/bin/rmiregistry
+/usr/bin/lsdiff
+/usr/bin/jmap
+/usr/bin/gnroff
+/usr/bin/pstree.x11
+/usr/bin/db2rtf
+/usr/bin/dnsdomainname
+/usr/bin/tclsh
+/usr/bin/texconfig-sys
+/usr/bin/jarsigner
+/usr/bin/mysql_config
+/usr/bin/csh
+/usr/bin/tnameserv
+/usr/bin/spam
+/usr/bin/pmatop
+/usr/bin/updmap-sys
+/usr/bin/gneqn
+/usr/bin/gimp
+/usr/bin/pstack
+/usr/bin/zsoelim
+/usr/bin/jinfo
+/usr/bin/domainname
+/usr/bin/gnome-keyring
+/usr/bin/subscription-manager
+/usr/bin/httexi
+/usr/bin/native2ascii
+/usr/bin/javap
+/usr/bin/gtar
+/usr/bin/nmtui-edit
+/usr/bin/arecord
+/usr/bin/lp
+/usr/bin/jstatd
+/usr/bin/jps
+/usr/bin/ebb
+/usr/bin/mkluatexfontdb
+/usr/bin/cdrecord
+/usr/bin/purgestat
+/usr/bin/Mail
+/usr/bin/wsgen
+/usr/bin/cc
+/usr/bin/parecord
+/usr/bin/linux64
+/usr/bin/apt
+/usr/bin/makeinfo
+
+Q9: 
+use man ls
+$cd /usr/lib && ls -lt
+	look at the date, the file at the bottom is the oldest
+
+Q10:
+man -k locate
+it shows locale gets data from localedef
+
+Q11:
+C-h a sort 
+
+Buffer-menu-sort              M-x ... RET
+Sort Tabulated List entries by the column at point.
+sort-columns                  M-x ... RET
+Sort lines in region alphabetically by a certain range of columns.
+sort-fields                   M-x ... RET
+Sort lines in region lexicographically by the ARGth field of each
+line.
+sort-lines                    M-x ... RET
+Sort lines in region alphabetically; argument means descending
+order.
+sort-numeric-fields           M-x ... RET
+Sort lines in region numerically by the ARGth field of each line.
+sort-pages                    M-x ... RET
+Sort pages in region alphabetically; argument means descending
+order.
+sort-paragraphs               M-x ... RET
+Sort paragraphs in region alphabetically; argument means descending
+order.
+sort-regexp-fields            M-x ... RET
+Sort the text in the region region lexicographically.
+tabulated-list-col-sort       M-x ... RET
+Sort Tabulated List entries by the column of the mouse click E.
+tabulated-list-sort           M-x ... RET
+Sort Tabulated List entries by the column at point.
+
+Q12:
+$C-h k [letter]
+C-M-a
+Move backward to the beginning of a defun.
+C-M-b
+Move backward across one balanced expression (sexp).
+C-M-c
+Exit from the innermost recursive edit or minibuffer.
+C-M-d
+Move forward down one level of parentheses.
+C-M-e
+Move forward to next end of defun.
+C-M-f
+Move forward across one balanced expression (sexp).
+C-M-g
+Does not exist
+C-M-h
+Put mark at end of this defun, point at beginning.
+The defun marked is the one that contains point or follows point.
+
+Q13:
+$C-h k C-g
+cancel current command 
+
+Q14:
+$C-h f yank 
+paste the last stretch of killed text
+
+Q15: 
+In emacs, use
+C-h d /usr/bin
+In command, use
+cd /usr/bin && ls -l
+emacs listed more directories than command. 
