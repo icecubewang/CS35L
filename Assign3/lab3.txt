@@ -1,0 +1,143 @@
+lab3.log
+
+Feilan Wang
+UID: 104796844
+
+1. Download coreutils 7.6 from assignment page. 
+	$wget ftp://ftp.gnu.org/gnu/coreutils/coreutils-7.6.tar.gz
+
+2. Unzip the file.
+	$tar -xzvf coreutils-7.6.tar.gz
+
+3. Create a directory:
+	$mkdir installcoreutils
+	This directory will be used to store the unfixed ls.c
+
+4. Enter coreutils-7.6 directory:
+	$cd coreutils-7.6
+
+5. Configure the path:
+	$./configure --prefix=/u/eng/class/classfei/Desktop/CS35L/CS35Lass3/installcoreutils
+
+6. Run the command:
+	$make
+	$make check	//this step is not neccessary 
+	and result says: All 152 tests passed (1 test was not run).
+
+7. Compile the program by running:
+	$make install
+
+8. To reproduce the result:
+	$cd src
+	$./ls -l /bin/bash
+	and result is: 
+	-rwxr-xr-x 1 root root 960632 2017-08-03 06:36 /bin/bash
+	which is the "incorrect" format.
+	While 
+	$ls -l /bin/bash  
+	produces:
+	-rwxr-xr-x 1 root root 960632 Aug  3 06:36 /bin/bash
+
+9. Now we want to apply Brady's Patch. First change the path to coreutils-7.6/.
+	$cd ..
+
+10. Create a new file named patch_file using emacs and copy the content of Brady's patch. 
+
+11. Now we run the patch command:
+	$patch -p1 < patch_file
+	//-p1 gives the file name without a/.
+    Result:
+        patching file src/ls.c
+	Hunk #1 succeeded at 2013 (offset -1 lines).
+	patch unexpectedly ends in middle of line
+	Hunk #2 succeeded at 2028 with fuzz 1 (offset -1 lines).
+
+12. Recompile the program.
+	$make
+    The following was generated:
+
+    make  all-recursive
+	make[1]: Entering directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6'
+	Making all in lib
+	make[2]: Entering directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/lib'
+	make  all-recursive
+	make[3]: Entering directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/lib'
+	make[4]: Entering directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/lib'
+	make[4]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/lib'
+	make[3]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/lib'
+	make[2]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/lib'
+	Making all in src
+	make[2]: Entering directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/src'
+	make  all-am
+	make[3]: Entering directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/src'
+	  CC     ls.o
+	  CCLD   dir
+	  CCLD   vdir
+	  CCLD   ls
+	make[3]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/src'
+	make[2]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/src'
+	Making all in doc
+	make[2]: Entering directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/doc'
+	make[2]: Nothing to be done for `all'.
+	make[2]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/doc'
+	Making all in man
+	make[2]: Entering directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/man'
+ 	  GEN    dir.1
+	  GEN    vdir.1
+	  GEN    ls.1
+	make[2]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/man'
+	Making all in po
+	make[2]: Entering directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/po'
+	make[2]: Nothing to be done for `all'.
+	make[2]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/po'
+	Making all in tests
+	make[2]: Entering directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/tests'
+	make[2]: Nothing to be done for `all'.
+	make[2]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/tests'
+	Making all in gnulib-tests
+	make[2]: Entering directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/gnulib-tests'
+	make  all-recursive
+	make[3]: Entering directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/gnulib-tests'
+	make[4]: Entering directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/gnulib-tests'
+	make[4]: Nothing to be done for `all-am'.
+	make[4]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/gnulib-tests'
+	make[3]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/gnulib-tests'
+	make[2]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6/gnulib-tests'
+	make[2]: Entering directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6'
+	make[2]: Nothing to be done for `all-am'.
+	make[2]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6'
+	make[1]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass3/coreutils-7.6'
+
+13. Return to the coreutils-7.6/src and do the following command again:
+	$./ls -l /bin/bash
+	The result is:
+	-rwxr-xr-x 1 root root 960632 Aug  3 06:36 /bin/bash
+	This is the correct format of date. 
+
+	While we can still reproduce the "incorrect" format by going to /installcoreutils/bin and enter:
+	$./ls -l /bin/bash
+	The result is:
+	-rwxr-xr-x 1 root root 960632 2017-08-03 06:36 /bin/bash
+
+14. Now, cd back to /src directory.
+	Add two files using the following command:
+	$touch new_file
+	$touch -t 201601010101.01 old_file
+
+15. Then, run the command again:
+	$./ls -l
+	and the output is:
+	...
+	-rw-r--r-- 1 classfei class      0 Jan  1  2016 old_file
+	...
+	-rw-r--r-- 1 classfei class      0 Oct 21 12:57 new_file
+	...
+	It works!
+
+16. If the same thing is did in installcoreutils/bin directory,
+	the result is still the "incorrect" format:
+	...
+	-rw-r--r-- 1 classfei class      0 2016-01-01 01:01 oldfile
+	...
+	-rw-r--r-- 1 classfei class      0 2017-10-21 13:04 newfile
+	...

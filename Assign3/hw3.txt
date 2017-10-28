@@ -1,0 +1,62 @@
+hw3.txt
+CS35L
+Feilan Wang
+104796844
+
+Q1: 
+Why did Brady's patch remove the line "case_long_iso_time_style:"? 
+Was it necessary to remove that line? Explain.
+
+Brady's patch removes the label "case_long_iso_time_style" 
+because the goto statement is deleted.
+This label will no longer be called. 
+However, it's existence does not affect the program.
+
+Q2:
+If your company adopts this patched version of Coreutils 
+instead of the default one, 
+what else should you watch out for? 
+Might this new version of Coreutils introduce 
+other problems with your application, 
+perhaps in countries where users don't speak English and 
+don't understand English-format dates?
+
+Some locales that do not have the translation will display
+only English and non-English speakers will not understand. 
+
+Q3:
+What happens when this script is invoked on an empty file like /dev/null, 
+and why?
+
+If the randline.py script invoked on an empty file, 
+the following errors are generated:
+
+  File "./randline.py", line 70, in <module>
+    main()
+  File "./randline.py", line 64, in main
+    sys.stdout.write(generator.chooseline())
+  File "./randline.py", line 34, in chooseline
+    return random.choice(self.lines)
+  File "/usr/lib64/python2.7/random.py", line 274, in choice
+    return seq[int(self.random() * len(seq))]
+    # raises IndexError if seq is empty
+IndexError: list index out of range
+
+This is because the empty file "contains" no line and 
+trying to read a line from it generates undefined behavior.
+
+Q4:
+What happens when this script is invoked with Python 3 rather than Python 2, 
+and why? (You can run Python 3 on the SEASnet hosts by 
+using the command python3 instead of python.)
+
+When trying to run readline.py under python3, 
+the following error message is generated:
+
+  File "randline.py", line 65
+    except IOError as (errno, strerror):
+                      ^
+SyntaxError: invalid syntax
+
+This is because in python3, IOError is merged into OSError, 
+so the corresponding argument changed.
