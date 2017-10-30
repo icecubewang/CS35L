@@ -1,0 +1,207 @@
+CS35L 
+Lab4.txt
+Feilan Wang
+104796844
+
+
+1. Login to SEASnet account and go to lab5 directory. 
+
+2. Download the zipped coreutils-with-bug.
+	$wget http://web.cs.ucla.edu/classes/fall17/cs35L/assign/coreutils-with-bug.tar.gz
+
+3. Unzip the file.
+	$tar -xzvf coreutils-with-bug.tar.gz
+
+4. Create a directory.
+	$mkdir installcoreutils
+
+5. Enter the coreutils-with-bug directory.
+	$cd coreutils-with-bug
+
+6. Configure the path.
+	$./configure --prefix=/u/eng/class/classfei/Desktop/CS35L/CS35Lass4/installcoreutils
+
+7. Build executable.
+	$make
+   The following error occurs at this step:
+
+   	In file included from utimecmp.c:41:0:
+	utimens.h:2:5: error: conflicting types for 'futimens'
+	 int futimens (int, char const *, struct timespec const [2]);
+	     ^
+	In file included from utimecmp.h:25:0,
+	                 from utimecmp.c:25:
+	/usr/include/sys/stat.h:373:12: note: previous declaration of 'futimens' was here
+	 extern int futimens (int __fd, const struct timespec __times[2]) __THROW;
+	            ^
+	make[3]: *** [utimecmp.o] Error 1
+	make[3]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass4/coreutils-with-bug/lib'
+	make[2]: *** [all] Error 2
+	make[2]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass4/coreutils-with-bug/lib'
+	make[1]: *** [all-recursive] Error 1
+	make[1]: Leaving directory `/w/home.15/class/classfei/Desktop/CS35L/CS35Lass4/coreutils-with-bug'
+
+8. The error indicates there's naming conflict, as we can see that the same function takes in two different set of arguments. To solve this problem, download the patch.
+	$wget http://web.cs.ucla.edu/classes/fall17/cs35L/assign/coreutils.diff
+
+9. Apply the patch.
+	$patch -p0 < coreutils.diff
+   and the following feedback is produced:
+
+	patching file lib/utimens.c
+	patching file lib/utimens.h
+	patching file src/copy.c
+	patching file src/tee.c
+	patching file src/touch.c
+
+   This patch fixed the problem by changing the name of one of the functions to 'coreutils_futimens', so it is now distinguishable from 'futimens'.
+
+10. Build executable again and install it.
+	$make
+	$make install
+
+	The libraries are now installed to ~/Desktop/CS35L/CS35Lass4/installcoreutils
+
+11. Create a temporary directory, and then create three files, according to the spec.
+	$ tmp=$(mktemp -d)
+	$ cd $tmp
+	$ touch -d '1918-11-11 11:00 GMT' wwi-armistice
+	$ touch now
+	$ sleep 1
+	$ touch now1
+	$ TZ=UTC0 ~/Desktop/CS35L/CS35Lass4/coreutils-with-bug/src/ls -lt --full-time wwi-armistice now now1
+
+	The following result is produced:
+
+	-rw-r--r-- 1 classfei class 0 1918-11-11 11:00:00.000000000 +0000 wwi-armistice
+    -rw-r--r-- 1 classfei class 0 2017-10-29 05:08:26.378100683 +0000 now1
+    -rw-r--r-- 1 classfei class 0 2017-10-29 05:08:19.639988955 +0000 now
+
+    This is buggy because wwi-armistice should be in the 3rd line instead of 1st line. 
+
+12. Use gdb to debug.
+	$gdb ~/Desktop/CS35L/CS35Lass4/coreutils-with-bug/src/ls
+
+13. First, we want to take a look at the list of functions in ls, and look for those that might affect the sequence of the files. 
+	(gdb) info functions
+
+	The following functions are listed:
+
+	File ls.c:
+	int main(int, char **);
+	void usage(int);
+	static size_t calculate_columns(_Bool);
+	static void clear_files(void);
+	static int compare_atime(V, V);
+	static int compare_ctime(V, V);
+	static int compare_extension(V, V);
+	static int compare_mtime(V, V);
+	static int compare_name(V, V);
+	static int compare_size(V, V);
+	static int compare_version(V, V);
+	static int compstr_atime(V, V);
+	static int compstr_ctime(V, V);
+	static int compstr_extension(V, V);
+	static int compstr_mtime(V, V);
+	static int compstr_name(V, V);
+	static int compstr_size(V, V);
+	static _Bool dev_ino_compare(const void *, const void *);
+	static void dev_ino_free(void *);
+	static size_t dev_ino_hash(const void *, size_t);
+
+	There are 3 types of compare_time:
+	atime - file access time
+	ctime - file change time
+	mtime - file modify time
+
+	In this case, we are interested in mtime. 
+
+14. Put a breakpoint at function compare_mtime.
+	(gdb) break compare_mtime
+
+	Produces:
+	Breakpoint 1 at 0x406483: compare_mtime. (2 locations)
+
+15. Run the program.
+	(gdb) r -lt --full-time wwi-armistice now now1
+
+	The program will stop at the breakpoint:
+	Starting program: /u/eng/class/classfei/Desktop/CS35L/CS35Lass4/coreutils-with-bug/src/ls -lt --full-time wwi-armistice now now1
+
+	Breakpoint 1, compare_mtime (a=0x6171a0, b=0x617250) at ls.c:2884
+	2884	static int compare_mtime (V a, V b) { return cmp_mtime (a, b, xstrcoll); }
+
+16. Step into this function.
+	(gdb) si
+
+	Produces:
+	timespec_cmp (b=..., a=...) at ../lib/timespec.h:49
+	49	  return diff ? diff : a.tv_nsec - b.tv_nsec;
+
+	At line 49 of ../lib/timespec.h, it is possible for the program to run into integer overflow. 
+	Hence, it is better to return the result of comparison between the two values instead. 
+
+17. Finish running the program.
+	(gdb) finish
+
+	Produces:
+	-rw-r--r-- 1 classfei class 0 1918-11-11 03:00:00.000000000 -0800 wwi-armistice
+    -rw-r--r-- 1 classfei class 0 2017-10-28 22:08:26.378100683 -0700 now1
+    -rw-r--r-- 1 classfei class 0 2017-10-28 22:08:19.639988955 -0700 now
+
+18. Quit gdb debugger.
+	(gdb) quit
+
+19. Exit temprary directory and remove it. 
+	$cd ~/Desktop/CS35L/CS35Lass4/coreutils-with-bug/lib
+	$rm -rf $tmp
+
+20. Copy the content of timespec.h into a new file new_timespec.h.
+	$cp timespec.h new_timespec.h
+
+21. Use emacs to modify new_timespec.h.
+	$emacs new_timespec.h
+
+22. Remove the lines in timespec_cmp functions with the following:
+
+	if (a.tv_sec < b.tv_sec) 
+		return -1;
+	else if (b.tv_sec < a.tv_sec) 
+		return 1;
+	else return 0;
+
+23. Create a Changelog.
+	C-x 4 a
+
+24. Save changes.
+	C-x C-c y y
+
+25. We only want the first 5 lines from the Changelog into lab4.diff.
+	$sed -n 1,4p Changelog >> lab4.diff
+
+26. Generate the patch file.
+	$diff -u timespec.h new_timespec.h > patch.diff
+
+27. Append the content of patch.diff into lab4.diff.
+	$cat patch.diff >> lab4.diff
+
+28. To reproduce the problem in home directory, return to home.
+	$cd ~
+
+29. Create the three files and ls.
+	$touch -d '1918-11-11 11:00 GMT' wwi-armistice
+	$touch now
+	$sleep 1
+	$touch now1
+	$TZ=UTC0 ls -lt --full-time wwi-armistice now now1
+
+	Produces:
+	-rw-r--r-- 1 classfei class 0 2054-12-17 17:28:16.000000000 +0000 wwi-armistice
+    -rw-r--r-- 1 classfei class 0 2017-10-29 06:26:23.866330000 +0000 now1
+    -rw-r--r-- 1 classfei class 0 2017-10-29 06:26:16.326643000 +0000 now
+
+   The time printed for wwi-armistice is in the future
+   because SEASnet is unable to recognize a time dated so back in the past.
+   It uses an unsigned 32-bits NFS filesystem
+   that truncates the preceding 32 bits of the 64 bits.
+   Therefore, it returns a time in the future instead. 

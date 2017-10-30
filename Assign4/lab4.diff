@@ -1,0 +1,20 @@
+2017-10-28  Feilan Wang  <classfei@lnxsrv09.seas.ucla.edu>
+
+	* new_timespec.h: To prevent integer overflow when there is subtraction, use a direct comparison between the two arguments instead. 
+
+--- timespec.h	2005-09-21 23:05:39.000000000 -0700
++++ new_timespec.h	2017-10-28 23:01:21.542081000 -0700
+@@ -45,8 +45,11 @@
+ static inline int
+ timespec_cmp (struct timespec a, struct timespec b)
+ {
+-  int diff = a.tv_sec - b.tv_sec;
+-  return diff ? diff : a.tv_nsec - b.tv_nsec;
++  if (a.tv_sec < b.tv_sec)
++    return -1;
++  else if (b.tv_sec < a.tv_sec)
++    return 1;
++  else return 0;
+ }
+ 
+ # if ! HAVE_DECL_NANOSLEEP
