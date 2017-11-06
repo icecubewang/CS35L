@@ -35,7 +35,6 @@ int frobcmp (char const *a, char const *b) {
 }
 
 int cmp(const void *a, const void *b) {
-  printf("compare\n");
   return frobcmp(*(char const**)a, *(char const**)b);
 }
 
