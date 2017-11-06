@@ -1,0 +1,121 @@
+CS35L - LAB5
+lab.txt
+Feilan Wang
+104796844
+
+1.	Write a program tr2b.c using getchar() and putchar() and compile 
+	$gcc tr2b.c -o tr2b
+
+2.	Copy tr2b.c into a new file, tr2u.c, and modify it to use read() and write().
+	$cp tr2b.c tr2u.c
+	Then compile
+	$gcc tr2u.c -o tr2u
+
+3.	Create a file that is more than 5MB large. 
+	$emacs testfile.txt 	//enter "abcd"
+	$cat testfile.txt >> testfile2.txt
+	$cat testfile2.txt >> testfile.txt
+	...
+	Repeat the process for a few times until a file larger than 5MB is created.
+	Use $ls -il to check file size.
+
+	460745 -rw-r--r-- 1 classfei class 6731345 Nov  4 16:45 testfile.txt
+
+4. Run command for tr2b (a) copy one file to another:
+	$strace -c ./tr2b abcd wxyz < testfile.txt > output_tr2b
+
+	% time     seconds  usecs/call     calls    errors syscall
+	------ ----------- ----------- --------- --------- ----------------
+	 55.18    0.000474           1       822           write
+	 27.82    0.000239           0       824           read
+	  5.94    0.000051           6         9           mmap
+	  3.49    0.000030           8         4           mprotect
+	  1.86    0.000016           8         2           open
+	  1.86    0.000016           4         4           fstat
+	  1.28    0.000011          11         1           munmap
+	  0.81    0.000007           7         1         1 access
+	  0.70    0.000006           3         2           close
+	  0.58    0.000005           5         1           execve
+	  0.23    0.000002           2         1           brk
+	  0.23    0.000002           2         1           arch_prctl
+	------ ----------- ----------- --------- --------- ----------------
+	100.00    0.000859                  1672         1 total
+
+	Run command for tr2b (b) copy a file to terminal:
+	$strace -c ./tr2b abcd wxyz < testfile.txt
+
+	% time     seconds  usecs/call     calls    errors syscall
+	------ ----------- ----------- --------- --------- ----------------
+	 99.93    8.415718           6   1346269           write
+	  0.07    0.005691           7       824           read
+	  0.00    0.000019           5         4           mprotect
+	  0.00    0.000012          12         1           arch_prctl
+	  0.00    0.000011          11         1           munmap
+	  0.00    0.000009           2         4           fstat
+	  0.00    0.000008           1         9           mmap
+	  0.00    0.000000           0         2           open
+	  0.00    0.000000           0         2           close
+	  0.00    0.000000           0         1           brk
+	  0.00    0.000000           0         1         1 access
+	  0.00    0.000000           0         1           execve
+	------ ----------- ----------- --------- --------- ----------------
+	100.00    8.421468               1347119         1 total
+
+	Run command for tr2u (a) copy one file to another:
+	$strace -c ./tr2u abcd wxyz < testfile.txt > output_tr2u
+
+	% time     seconds  usecs/call     calls    errors syscall
+	------ ----------- ----------- --------- --------- ----------------
+	 56.09   37.794141           6   6731345           write
+	 43.91   29.591806           4   6731347           read
+	  0.00    0.000000           0         2           open
+	  0.00    0.000000           0         2           close
+	  0.00    0.000000           0         2           fstat
+	  0.00    0.000000           0         7           mmap
+	  0.00    0.000000           0         4           mprotect
+	  0.00    0.000000           0         1           munmap
+	  0.00    0.000000           0         1           brk
+	  0.00    0.000000           0         1         1 access
+	  0.00    0.000000           0         1           execve
+	  0.00    0.000000           0         1           arch_prctl
+	------ ----------- ----------- --------- --------- ----------------
+	100.00   67.385947              13462714         1 total
+
+	Run command for tr2u (b) copy a file to terminal:
+	$strace -c ./tr2u abcd wxyz < testfile.txt
+
+	% time     seconds  usecs/call     calls    errors syscall
+	------ ----------- ----------- --------- --------- ----------------
+	 53.63   34.993509           5   6731345           write
+	 46.37   30.255049           4   6731347           read
+	  0.00    0.000024           6         4           mprotect
+	  0.00    0.000019           3         7           mmap
+	  0.00    0.000012          12         1           munmap
+	  0.00    0.000004           4         1           arch_prctl
+	  0.00    0.000000           0         2           open
+	  0.00    0.000000           0         2           close
+	  0.00    0.000000           0         2           fstat
+	  0.00    0.000000           0         1           brk
+	  0.00    0.000000           0         1         1 access
+	  0.00    0.000000           0         1           execve
+	------ ----------- ----------- --------- --------- ----------------
+	100.00   65.248617              13462714         1 total
+
+	The tr2b version has much less system call compared to tr2u.
+	Output a file to terminal has more system call than copy a file to another for tr2b.
+
+5.	Run time command for tr2b:
+	$time ./tr2b abcd wxyz < testfile.txt 
+
+	real	0m12.279s
+	user	0m0.617s
+	sys	0m6.131s
+
+	Run time command for tr2u:
+	$time ./tr2u abcd wxyz < testfile.txt 
+
+	real	0m15.373s
+	user	0m0.646s
+	sys	0m12.679s
+
+	Since tr2b has less system call, it runs faster than tr2u. 

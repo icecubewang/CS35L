@@ -1,0 +1,52 @@
+CS35L - HW5
+sfrob.txt
+Feilan Wang
+104796844
+
+Testing on a file (8686 lines):
+
+	File description:
+	
+	460748 -rw-r--r-- 1 classfei class 466614 Nov  5 21:44 input.txt
+
+	Table:
+
+	----------------------------------------------------------
+	|      | sfrob | sfrobu | sfrobu -f | sfrobs | sfrobs -f |
+	----------------------------------------------------------
+	| real | 0.038s| 0.280s |   0.279s  | 0.056s |   0.121s  |
+	----------------------------------------------------------
+	| user | 0.035s| 0.040s |   0.045s  | 0.047s |   0.090s  |
+	----------------------------------------------------------
+	| sys  | 0.001s| 0.237s |   0.232s  | 0.010s |   0.046s  |
+	----------------------------------------------------------
+
+Testing on a file (4343 lines):
+
+	File description:
+	
+	460748 -rw-r--r-- 1 classfei class 233307 Nov  5 23:36 input.txt
+
+	Table:
+
+	----------------------------------------------------------
+	|      | sfrob | sfrobu | sfrobu -f | sfrobs | sfrobs -f |
+	----------------------------------------------------------
+	| real | 0.079s| 0.527s |   0.547s  | 0.105s |   0.142s  |
+	----------------------------------------------------------
+	| user | 0.070s| 0.087s |   0.095s  | 0.096s |   0.135s  |
+	----------------------------------------------------------
+	| sys  | 0.005s| 0.435s |   0.443s  | 0.016s |   0.018s  |
+	----------------------------------------------------------
+
+Comparison:
+
+- Doubling the size of the file roughly doubles the time.
+- sfrobs (shell script) runs faster than the other two.
+- With -f, sfrobs and sfrobu run slower as both have more process to do.
+- sfrob and sfrobu is more throughly written, this might contribute slightly to why they run slower than sfrobs.
+
+To estimate the number of comparison as a function of number of input lines:
+	8686 lines of file takes roughly 1100000 comparisons.
+	4343 lines of file takes roughly 512500 comparisons.
+	f = (587500/4343)n - 75000
