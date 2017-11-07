@@ -2,24 +2,11 @@
 #include <stdlib.h>
 #define SIZE 500
 
-void checkMemAllocError(char* cp) {
-  if (cp == NULL) {
-    fprintf(stderr, "Error: Memory allocation failure.\n");
-    exit(1);
-  }
-}
-
 void checkInputError() {
   if (ferror(stdin)) {
     fprintf(stderr, "Error: Input failure.\n");
     exit(1);
   }
-}
-
-void memRealloc(char** cp, int size) {
-  char* reallocate = (char*) realloc(*cp, size+SIZE);
-  checkMemAllocError(reallocate);
-  *cp = reallocate;
 }
 
 //  ./tr2b abcd wxyz < bigfile.txt
