@@ -1,0 +1,60 @@
+CS35L - LAB6
+lab.txt
+Feilan Wang
+104796844
+
+1.	To use the newest version of sort: 
+	$ export PATH=/usr/local/cs/bin:$PATH
+
+2.	Check the version.
+	$ sort --version
+	>>> sort (GNU coreutils) 8.28
+
+3.	Generate a file containing 10,000,000 random single-precision floating point numbers, 
+	in textual form, one per line with no white space. 
+	$ od -An -N40000000 -tfF < /dev/random | tr [:blank:] '\n' | sed '/^$/d' > fp.txt
+	//-An removes the address.
+	//-N40000000 prints 40,000,000 bytes of single pricision floating points. 
+	//Since each is 4 bytes, there will be 10,000,000 of them.
+	//-tfF specifies the type to be single precision floating point.
+	//tr [:blank:] '\n' translates all blank space to newlines.
+	//sed '/^$/d' removes all empty lines. 
+
+4.	Check that the file generated has 10,000,000 lines.
+	$ wc -l fp.txt
+	>>> 10000000 fp.txt
+
+5.	Sort without parallel.
+	$ time -p sort -g fp.txt > /dev/null
+	>>>
+	real 21.36
+	user 114.84
+	sys 0.44
+
+6.	Sort with parallel benchmark 1.
+	$ time -p sort -g --parallel=1 fp.txt > /dev/null
+	>>>
+	real 112.28
+	user 112.00
+	sys 0.27
+
+7.	Sort with parallel benchmark 2.
+	$ time -p sort -g --parallel=2 fp.txt > /dev/null
+	>>>
+	real 59.08
+	user 112.23
+	sys 0.28
+
+8.	Sort with parallel benchmark 4.
+	$ time -p sort -g --parallel=4 fp.txt > /dev/null
+	>>>
+	real 38.14
+	user 126.12
+	sys 0.43
+
+9.	Sort with parallel benchmark 8.
+	$ time -p sort -g --parallel=8 fp.txt > /dev/null
+	>>>
+	real 21.38
+	user 114.73
+	sys 0.45

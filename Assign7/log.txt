@@ -1,0 +1,130 @@
+CS35L - LAB7
+log.txt
+Feilan Wang
+104796844
+
+1.	Follow the setup instructions on Piazza.
+
+	a. Connect BeagleBone to computer using the USB cable.
+	b. Find BeagleBone as an external storage device and open it.
+	c. Double-click on the “START.htm” file, and install the drivers for Mac OS system. 
+		For this step, I have to download from http://nyus.joshuawise.com/...
+		and in the terminal, run:
+		$ sudo rm -rf/System/Library/Extensions/HoRNDIS.kext
+		and then restart Mac.
+		//I solved this by looking on Piazza for solution.
+	d. In terminal, SSH into BeagleBone:
+		$ sudo ssh root@192.168.7.2
+		$ 
+	e. Connect to wifi.
+		$ sudo connmanctl
+		> enable wifi
+		> scan wifi
+		> services
+		> agent on
+		> connect [copy& paste the wifi code shown above, and then enter password]
+		> quit
+	f. Update the database of apt-get:
+		$ sudo apt-get update
+	g. Install auth tool for X11 forwarding support to BeagleBone:
+		$ sudo apt-get install auth
+	h. Install Firefox:
+		$ apt-get install firefox-esr-l10n-en-gb
+
+	To check IP address:
+	$ ifconfig
+	My IP address: 192.168.1.9
+	My teammate's IP address: 192.168.8.1
+
+
+Server's part:
+
+2.	Make sure that I have openssh-server and openssh-client installed.
+	$ sudo apt-get install openssh-server
+	$ sudo apt-get install openssh-client
+	$ dpkg --get-selections | grep openssh
+	Outputs:
+	openssh-client					install
+	openssh-server					install
+	openssh-sftp-server				install
+
+3.	Generate public and private keys.
+	$ ssh-keygen
+	Outputs:
+	Generating public/private rsa key pair.
+	Enter file in which to save the key (/root/.ssh/id_rsa):
+
+	$[Enter]
+	by default saved to ~/.ssh/is_rsa and id_rsa.pub
+	Outputs:
+	Enter passphrase (empty for no passphrase):
+	
+	$ 123456	//This is the public key
+	Outputs:
+	Your identification has been saved in /root/.ssh/id_rsa.
+	Your public key has been saved in /root/.ssh/id_rsa.pub.
+	The key fingerprint is:
+	82:c0:f4:6d:ec:09:91:e8:78:b6:13:34:7b:09:37:3f root@beaglebone
+	The key's randomart image is:
+	+---[RSA 2048]----+
+	|  ....           |
+	| o=.++           |
+	| +o=o++          |
+	|. *.o=E.         |
+	| o +. +.S        |
+	|  o    .         |
+	|   .             |
+	|                 |
+	|                 |
+	+-----------------+
+
+4.	Create an account for the client on the server.
+	$ sudo useradd -d /home/cslab7 -m client1
+	$ sudo passwd client1
+	Outputs:
+	Enter new UNIX password: 
+	$abcdef
+	Retype new UNIX password: 
+	$abcdef
+	passwd: password updated successfully
+
+5.	Create .ssh directory for new user.
+	$ cd /home/cslab7
+	$ sudo mkdir .ssh
+
+6.	Change ownership and permission on .ssh directory.
+	$ sudo chown -R client1 .ssh
+	$ sudo chmod 700 .ssh
+
+7.	Install emacs and use it to disable password-based authentication.
+	$ sudo apt-get install emacs
+	$ emacs /etc/ssh/sshd_config
+	Change passwordAuthentication at L52 from yes to no
+
+
+Client's part:
+
+8.	Generate public and private keys.
+	$ ssh-keygen
+	and partner types in the password.
+
+9.	Copy the public key to the server for key-based authentication. (~/.ssh/authorized_keys)
+	$ ssh-copy-id -i client1@192.168.1.9
+	Enter the pasword to login.
+
+10.	Add private key to authentication agent (ssh-agent).
+	$ ssh-add
+	And enter the public key.
+
+11.	SSH to server.
+	$ ssh client1@192.168.1.9
+
+	(X11 session forwarding)
+	$ ssh -X client1@192.168.1.9
+
+12.	Run a command on the remote host.
+	$xterm
+	or
+	$gedit
+	or
+	$firefox
