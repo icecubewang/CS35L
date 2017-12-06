@@ -1,0 +1,211 @@
+CS35L - LAB9 
+lab.txt
+Feilan Wang 
+104796844
+
+1.	$ git clone https://git.savannah.gnu.org/git/diffutils.git
+	This clones a copy of the directory and save it on the current directory.
+
+2.	$ git log > ../git-log.txt
+	Generate a log file.
+
+3.	$ git tag > ../git-tag.txt
+	Generate a tag file.
+
+4.	$ git format-patch -1 62ca21c8c1a5aa3488589dcb191a4ef04ae9ed4f 
+	$ mv 0001-maint-quote-like-this-or-like-this-not-like-this.patch ../quote_patch.txt
+	
+
+5.	$ git checkout v3.0
+	Checkout to version 3.0.
+
+	Output:
+	Note: checking out 'v3.0'.
+
+	You are in 'detached HEAD' state. You can look around, make experimental
+	changes and commit them, and you can discard any commits you make in this
+	state without impacting any branches by performing another checkout.
+	
+	If you want to create a new branch to retain commits you create, you may
+	do so (now or later) by using -b with the checkout command again. Example:
+	
+	  git checkout -b <new-branch-name>
+	
+	HEAD is now at 022cd5c... version 3.0
+
+6.	$ patch -p1 < ../quote_patch.txt
+	Apply the patch. 
+
+	Problems:
+	Cannot find following files:
+		HACKING
+		/doc/diffutils.texi
+		/man/help2man
+
+7.	$ git status
+
+	Output:
+	HEAD detached at v3.0
+	Changes not staged for commit:
+	  (use "git add <file>..." to update what will be committed)
+	  (use "git checkout -- <file>..." to discard changes in working directory)
+
+		modified:   NEWS
+		modified:   README
+		modified:   TODO
+		modified:   doc/diagmeet.note
+		modified:   ms/config.bat
+		modified:   ms/config.site
+		modified:   po/en.po
+		modified:   src/analyze.c
+		modified:   src/cmp.c
+		modified:   src/context.c
+		modified:   src/diff.c
+		modified:   src/diff.h
+		modified:   src/diff3.c
+		modified:   src/dir.c
+		modified:   src/ifdef.c
+		modified:   src/io.c
+		modified:   src/sdiff.c
+		modified:   src/side.c
+		modified:   src/system.h
+		modified:   src/util.c
+		modified:   tests/help-version
+
+	Untracked files:
+	  (use "git add <file>..." to include in what will be committed)
+	
+		NEWS.orig
+		README-hacking.orig
+		README-hacking.rej
+		README.orig
+		README.rej
+		cfg.mk.orig
+		cfg.mk.rej
+		ms/config.site.orig
+		quote_patch.txt
+		src/cmp.c.orig
+		src/context.c.orig
+		src/diff.c.orig
+		src/diff.c.rej
+		src/diff.h.orig
+		src/diff3.c.orig
+		src/diff3.c.rej
+		src/dir.c.orig
+		src/sdiff.c.orig
+		src/system.h.orig
+		src/util.c.orig
+		tests/help-version.orig
+	
+	no changes added to commit (use "git add" and/or "git commit -a")
+
+8，9. Modified files that are not .c files are:
+		NEWS
+		README
+		TODO
+		doc/diagmeet.note
+		ms/config.bat
+		ms/config.site
+		po/en.po
+		src/diff.h
+		src/system.h
+		tests/help-version
+	 Each open using emacs.
+	 And C-x v-u yes.
+
+	 Modified files that are .c files are:
+	 	src/analyze.c
+	 	src/cmp.c
+	 	src/context.c
+	 	src/diff.c
+	 	src/diff3.c
+	 	src/dir.c
+	 	src/ifdef.c
+	 	src/io.c
+	 	src/sdiff.c
+	 	src/side.c
+	 	src/util.c
+	 Each open using emacs.
+	 And C-x v-= to check for changes. 
+	 Then revert only the comments (revert lines after //). 
+	 	src/analyze.c  //all: use C-x v-u
+	 	src/cmp.c      //36, 364, 377: manually
+	 	src/context.c  //all: use C-x v-u
+	 	src/diff.c     //40, 57, 92: manually
+	 	src/diff3.c    //35, 159, 1475: manually
+	 	src/dir.c      //87, 125, 234: manually
+	 	src/ifdef.c    //all: use C-x v-u
+	 	src/io.c       //all: use C-x v-u
+	 	src/sdiff.c    //35, 92, 747: manually
+	 	src/side.c     //all: use C-x v-u
+	 	src/util.c     //27, 121, 146, 190, 241, 270, 650: manually
+
+10.	There's only two files that need to be manually patched. 
+	src/diff.c    //876, 906, 942
+	C-x <right> to switch buffer in emacs
+	src/diff3.c   //433
+	Automatic patch fails because of line mismatch. 
+	So we do it manually using steps similar to that in 9. 
+	(Since line numbers are inaccurate, look for ` near those lines).
+
+11.	$ git clean -f
+	Note: can do a $ git clean -n to do a dry-run to see what will be removed.
+
+	Removing NEWS.orig
+	Removing README-hacking.orig
+	Removing README-hacking.rej
+	Removing README.orig
+	Removing README.rej
+	Removing cfg.mk.orig
+	Removing cfg.mk.rej
+	Removing ms/config.site.orig
+	Removing quote_patch.txt
+	Removing src/cmp.c.orig
+	Removing src/context.c.orig
+	Removing src/diff.c.orig
+	Removing src/diff.c.rej
+	Removing src/diff.h.orig
+	Removing src/diff3.c.orig
+	Removing src/diff3.c.rej
+	Removing src/dir.c.orig
+	Removing src/sdiff.c.orig
+	Removing src/system.h.orig
+	Removing src/util.c.orig
+	Removing tests/help-version.orig
+
+12.	$ git status
+
+	modified:   src/cmp.c
+	modified:   src/diff.c
+	modified:   src/diff3.c
+	modified:   src/dir.c
+	modified:   src/sdiff.c
+	modified:   src/util.c
+
+	git diff > ../quote-3.0-patch.txt
+
+13.	From README-hacking, run the following:
+	$ ./bootstrap
+	Apply patch by:
+	$ wget http://web.cs.ucla.edu/classes/fall17/cs35L/assign/diffutils-gets.diff
+	$ patch -p0 < diffutils-gets.diff
+	Then:
+	$ ./configure
+	$ make
+	$ make check
+	
+14.	Back to parent directory.
+	$cd ..
+	clone a new version.
+	$ git clone https://git.savannah.gnu.org/git/diffutils.git diffutils-3.0-old
+	$ mkdir diffutils-3.0-patch
+	$ mkdir diffutils-3.0
+	$ git checkout v3.0
+	$ cp ./diffutils-3.0-old/src/*.c ../diffutils-3.0/
+	$ cp ./diffutils/src/*.c ./diffutils-3.0-patch/
+	./diffutils/src/diff -pru diffutils-3.0 diffutils-3.0-patch/ > quote-3.0-test.txt
+
+15.	$ diff quote-3.0-test.txt diffutils/quote-3.0-patch.txt
+
+	The differences are mainly due to difference in path, and the wrong order of diff.c and diff3.c
+	So they are innocuous.

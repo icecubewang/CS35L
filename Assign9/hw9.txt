@@ -1,0 +1,68 @@
+CS35L - HW9
+hw9.txt
+Feilan Wang
+104796844
+
+1.	Use Sublime Text to record down the entire process. 
+
+2.	First, cd into the correct directory. 
+	$ cd diffutils
+	Then, checkout to version 3.0.
+	$ git checkout v3.0 -b quote
+
+3.	Install patch. 
+	patch -p1 < quote-3.0-patch.txt
+
+	patching file src/cmp.c
+	patching file src/diff.c
+	patching file src/diff3.c
+	patching file src/dir.c
+	patching file src/sdiff.c
+	patching file src/util.c
+
+4.	Try C-x 4 a on emacs.
+
+5.	Open src/cmp.c in emacs.
+	$ emacs src/cmp.c
+	C-x 4 a
+	Repeat the above steps for all files listed in 3. 
+
+6.	$ git add .
+	$ git commit -F src/ChangeLog
+
+7.	Generate patch. 
+	$ git format-patch -1 --stdout > formatted-patch.txt
+
+8.	Check with my partner. 
+	My partner: Henry
+	My partner UID: 304862442
+	Rename his patch to henry-formatted-patch.txt
+	$ git checkout v3.0 -b partner
+	$ git am ../henry-formatted-patch.txt
+	$ ./bootstrap
+	Apply the additional patch given on http://web.cs.ucla.edu/classes/fall17/cs35L/assign/diffutils-gets.diff
+	$ ./configure
+	$ make 
+	$ make check
+
+9.	Verify that my ChangeLog works,
+	$ make distdir
+	Then I chenge my ChangeLog and I found the first entry to be my entry.
+
+10.	Clone the repository.
+	$ git clone https://git.savannah.gnu.org/git/emacs.git
+	$ cd emacs 
+	$ gitk
+	Scroll down the list of commits, found out:
+	newest merge no newer than 2015-01-25 is 
+
+	Author: Joakim Verona <joakim@verona.se>  2015-01-25 12:19:27
+	Committer: Joakim Verona <joakim@verona.se>  2015-01-25 12:19:27
+	Parent: e5087278b9bcab5847ce63d80c0d74c27f50e719 (merge master)
+	Parent: a3689d3c661fe36df971c875760f8d500b5ae994 (Count MANY function args more reliably)
+	Child:  c251ec96117a847799a61338e7648da8a4ade9e0 (Fix visual glitch during webkit resizing)
+	Branches: master, remotes/origin/master and many more (74)
+	Follows: emacs-24.4
+	Precedes: emacs-25.0.90
+
+    	Merge branch 'master' into xwidget

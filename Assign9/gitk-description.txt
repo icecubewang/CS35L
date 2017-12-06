@@ -1,0 +1,10 @@
+CS35L - HW9
+gitk-description.txt
+Feilan Wang
+104796844
+
+The top left window contains a timeline structure of all commits since the very first version of emacs.
+The top middle window contains the author's name and email for each commit.
+The top right window contains the data and time for each commit.
+The bottom left window contains the content of the selected commit including the changes.
+The bottom right window contains the files affected by the selected commit. 
